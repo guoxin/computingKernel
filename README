@@ -14,7 +14,20 @@ and then two kernels, both normalized and unnormalized will be computed on a sma
 
 The package is also available at github: https://github.com/guoxin/computingKernel.git which will include any further improvements.
 
-This software is distributed under the terms of the GNU General Public License, either Version 2, June 1991 or Version 3, June 2007.
-
 'Share and Enjoy'.
+
 Copyright: Xin Guo on June 25, 2012
+This file is part of computingKernel.
+
+computingKernel is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+computingKernel is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with computingKernel.  If not, see <http://www.gnu.org/licenses/>.
