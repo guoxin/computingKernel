@@ -1,7 +1,6 @@
-dyn.load("GK3WN.so")
-dyn.load("GK3W.so")
-dyn.load("K3.so")
 computingKernel <- function(string.set, K1, beta, ni = "GK3WN"){
+  dyn.load("GK3WN.so")
+  dyn.load("GK3W.so")
   len <- length(string.set)
   K3 <- .C("GK3WN", 
     peptides = as.character(string.set), 
@@ -16,7 +15,54 @@ computingKernel <- function(string.set, K1, beta, ni = "GK3WN"){
    colnames(K3) <- rownames(K3) <- names(string.set)
    K3
 }
+getAAK3 <- function(proteins, maxLen, AAK1){
+  #input: proteins as a list, each entry is a list, containing:
+  #  proteins[[i]]$aa, a string of amino acid sequence
+  require("multicore")
+  dyn.load("STR.GEN.K3.so")
+  maxLen <- as.integer(maxLen)
+  AAK1 <- as.double(AAK1)
+  N <- length(proteins)
+  K3 <- matrix(0, nrow = N, ncol = N)
+  preKernel <- mclapply(1 : N, FUN = function(i){
+    g <- proteins[[i]]
+    glen <- as.integer(nchar(g$aa))
+    unlist(lapply(proteins[i:N], FUN = function(f){
+    .C("AaGenK3",
+      fa = as.character(f$aa),
+      ga = as.character(g$aa),
+      flen = as.integer(nchar(f$aa)),
+      glen = glen,
+      maxLen = maxLen,
+      AAK1 = AAK1,
+      K3 = as.double(0),
+      DUP = T,
+      PACKAGE = "STR.GEN.K3"
+    )$K3
+    }))
+  })
+  for(i in 1:N) K3[i:N, i] <- K3[i, i:N] <- preKernel[[i]]
+  rownames(K3) <- colnames(K3) <- names(proteins)
+  K3
+}
+nmkernel <- function(K){
+	if (dim(K)[1]==1) return(1)
+	dgn <- 1/sqrt(diag(K))
+	K <- sweep(x = K, MARGIN = 1, STATS = dgn, FUN = "*")
+	K <- sweep(x = K, MARGIN = 2, STATS = dgn, FUN = "*")
+	K
+}
+computingKernel2 <- function(string.set, K1, beta, ni = "GK3WN", maxLen = NULL){
+	stopifnot(ni %in% c("GK3WN", "GK3W"))
+	proteins <- list()
+	if(is.null(names(string.set))) names(string.set) <- string.set
+	for(a in names(string.set)) proteins[[a]] <- list(aa = string.set[a])
+	if(is.null(maxLen)) maxLen <- max(nchar(string.set))
+	if(ni == "GK3W") return(getAAK3(proteins, maxLen, AAK1 = K1^beta))
+	return(nmkernel(getAAK3(proteins, maxLen, AAK1 = K1^beta)))
+}
 computingKernelLocal <- function(str1, str2, K1, beta, mi = "pair", normalize = TRUE){
+  dyn.load("K3.so")
   #mode: "pair" and "rectangle". Let "*" denotes the kernel values.
   #in pair mode, compute kernel value in this way:
   #	str1[1]  str2[1]  *

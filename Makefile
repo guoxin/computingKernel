@@ -4,8 +4,5 @@ main: gx_core.h $(addsuffix .so,$(basename $(wildcard *.c)))
 %.so:%.c gx_core.h
 	-rm -f $(addsuffix .o,$(basename $<))
 	-rm -f $(addsuffix .so,$(basename $<))
-	R CMD SHLIB $<
+	-R CMD SHLIB $<
 	-rm -f $(addsuffix .o,$(basename $<))
-	
-
-	
