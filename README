@@ -1,8 +1,16 @@
-The codes in this package are supposed to be compiled and run on a Unix-Like system with gcc (to install gcc, see http://gcc.gnu.org) since we have used pthread to speed up the algorithm. To compute a kernel following the Introduction of our paper "Towards a Mathematical Foundation of Immunology and Amino Acid Chains" using this package, one should type
+The codes in this package are supposed to be compiled and run on Unix/Linux/Windows/Mac systems with gcc (to install gcc, see http://gcc.gnu.org). To compute a kernel following the Introduction of our paper "Towards a Mathematical Foundation of Immunology and Amino Acid Chains" using this package, one should type
 
 $make
 
-to compile the dynamic libraries and then load the source file "computingKernel.R" in R environment (to install R, see http://www.r-project.org)
+to compile the dynamic libraries and then load the source file "computingKernel.R" in R environment (to install R, see http://www.r-project.org). If you find yourself in R environment, type
+
+>system("make")
+
+or
+
+>system("R CMD SHLIB STR.GEN.K3.c")
+
+if you do not have "make" installed. To load the R functions type
 
 >source("computingKernel.R")
 
@@ -10,13 +18,16 @@ or you may simply do a test first by typing in R
 
 >source("test.R")
 
-and then two kernels, both normalized and unnormalized will be computed on a small set of peptides. Note that if the input chains contain some amino acid other than "A, R, N, D, C, Q, E, G, H, I, L, K, M, F, P, S, T, W, Y, V", the behavior of the program is unpredictable.
+and then two kernels, both normalized and unnormalized will be computed on a small set of peptides. Note that if the input chains contain some amino acid other than "A, R, N, D, C, Q, E, G, H, I, L, K, M, F, P, S, T, W, Y, V", an error will be returned.
 
 The package is also available at github: https://github.com/guoxin/computingKernel.git which will include any further improvements.
 
 'Share and Enjoy'.
 
 Copyright: Xin Guo on June 25, 2012
+version 2.0 uploaded on January 25, 2013. Our focus is to compute the K3 kernel and keep the codes as simple as possible, so we may have deleted some other functions appear in the previous versions that you may prefer.
+If you find any bugs please email me: xinguo2@alumni.cityu.edu.hk
+
 This file is part of computingKernel.
 
 computingKernel is free software: you can redistribute it and/or modify

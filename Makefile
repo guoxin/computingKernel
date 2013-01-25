@@ -1,7 +1,6 @@
-main: gx_core.h $(addsuffix .so,$(basename $(wildcard *.c)))
-#	echo $(addsuffix .so,$(basename $(wildcard *.c)))
+main : $(addsuffix .so,$(basename $(wildcard *.c)))
 .PHONY : main
-%.so:%.c gx_core.h
+%.so : %.c
 	-rm -f $(addsuffix .o,$(basename $<))
 	-rm -f $(addsuffix .so,$(basename $<))
 	-R CMD SHLIB $<
